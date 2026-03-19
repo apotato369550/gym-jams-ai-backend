@@ -4,6 +4,7 @@
 import json
 import httpx
 from pathlib import Path
+from datetime import datetime
 
 # Resolve paths relative to script location
 SCRIPT_DIR = Path(__file__).parent
@@ -29,7 +30,7 @@ payload = {
 }
 
 # Make request
-client = httpx.Client()
+client = httpx.Client(timeout=60.0)
 response = client.post("http://localhost:8000/generate_gym_chat_completions", json=payload)
 
 # Print response
@@ -39,7 +40,7 @@ print(json.dumps(response.json(), indent=2))
 # Write result to file
 results_dir = PROJECT_ROOT / "results" / "gym_chat"
 results_dir.mkdir(parents=True, exist_ok=True)
-result_file = results_dir / "latest.json"
+result_file = results_dir / (datetime.now().strftime("%m-%d-%Y_%H-%M-%S") + "_test_gym_chat.json")
 
 with open(result_file, "w") as f:
     json.dump(response.json(), f, indent=2)
