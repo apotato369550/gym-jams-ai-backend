@@ -1,0 +1,45 @@
+{
+  "id": "gen-1773900913-eFyb2Kqgz1umCRCRk68y",
+  "object": "chat.completion",
+  "created": 1773900913,
+  "model": "meta-llama/llama-3-8b-instruct",
+  "provider": "DeepInfra",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"total_volume_kg\": null,\n  \"total_reps\": 77,\n  \"muscle_groups_targeted\": [\"chest\", \"back\", \"legs\", \"shoulder\"],\n  \"estimated_calories_burned\": 180.0,\n  \"intensity_rating\": 4,\n  \"observation\": \"Great job squeezing in a quick morning session, Maria! You've shown consistency in your bodyweight exercises, and those dumbbell rows are a great way to challenge yourself without breaking the bank. Keep that energy going throughout your day!\"\n}",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 836,
+    "completion_tokens": 115,
+    "total_tokens": 951,
+    "cost": 2.968e-05,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 2.968e-05,
+      "upstream_inference_prompt_cost": 2.508e-05,
+      "upstream_inference_completions_cost": 4.6e-06
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

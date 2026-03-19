@@ -1,0 +1,45 @@
+{
+  "id": "gen-1773900772-laGluUCNg4AHB8wHACUr",
+  "object": "chat.completion",
+  "created": 1773900772,
+  "model": "meta-llama/llama-3-8b-instruct",
+  "provider": "DeepInfra",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"archetype\": \"The Dorm Dynamo\",\n  \"read\": \"Maria, you're a driven college student who's eager to upgrade your physical game without breaking the bank. You're not a morning person, but you're willing to make sacrifices for a healthier, more confident you. Your vibe is energetic, entrepreneurial, and resourceful.\",\n  \"modalities_youll_enjoy\": [\n    \"bodyweight exercises\",\n    \"home workouts\",\n    \"outdoor activities (parks, streets, etc.)\"\n  ],\n  \"first_week_suggestion\": \"Dedicate 20 minutes, 3 times a week, to gentle morning exercises like push-ups, squats, and jumping jacks in your dorm room. Use your phone's timer and a yoga mat for makeshift space. As the week progresses, aim to increase the duration by 5 minutes. Don't forget to stretch afterwards!\",\n  \"watch_out_for\": \"Don't get too hard on yourself, especially on busy weekdays. A 20-minute workout is a great start, but remember to listen to your body and rest when needed. Prioritize self-care and don't sacrifice sleep for exercise.\"",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 651,
+    "completion_tokens": 237,
+    "total_tokens": 888,
+    "cost": 2.901e-05,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 2.901e-05,
+      "upstream_inference_prompt_cost": 1.953e-05,
+      "upstream_inference_completions_cost": 9.48e-06
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}
