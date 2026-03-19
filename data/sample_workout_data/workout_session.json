@@ -1,0 +1,41 @@
+{
+  "date": "2026-03-19",
+  "notes": "Quick morning session before classes. Felt good today.",
+  "exercises": [
+    {
+      "name": "Push-ups",
+      "sets": 3,
+      "reps": 15,
+      "weight_kg": null,
+      "duration_mins": null
+    },
+    {
+      "name": "Bodyweight squats",
+      "sets": 3,
+      "reps": 20,
+      "weight_kg": null,
+      "duration_mins": null
+    },
+    {
+      "name": "Dumbbell rows",
+      "sets": 3,
+      "reps": 12,
+      "weight_kg": 5,
+      "duration_mins": null
+    },
+    {
+      "name": "Plank",
+      "sets": 3,
+      "reps": null,
+      "weight_kg": null,
+      "duration_mins": 1
+    },
+    {
+      "name": "Jumping jacks",
+      "sets": 2,
+      "reps": 30,
+      "weight_kg": null,
+      "duration_mins": null
+    }
+  ]
+}

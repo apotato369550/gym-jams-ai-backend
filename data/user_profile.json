@@ -1,0 +1,17 @@
+{
+  "name": "Maria Santos",
+  "age_range": "19-24",
+  "height_cm": 158,
+  "weight_kg": 72,
+  "location": "Quezon City",
+  "activity_level": "lightly_active",
+  "goal": "lose_weight",
+  "intent": "I want to feel more confident and have energy to get through long study days without feeling sluggish.",
+  "constraints": [
+    "no gym",
+    "student budget",
+    "busy weekdays",
+    "dorm living",
+    "limited equipment"
+  ]
+}

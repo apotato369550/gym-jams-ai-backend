@@ -1,0 +1,392 @@
+{
+  "range": "month",
+  "sessions": [
+    {
+      "date": "2026-02-23",
+      "notes": "Started fresh this week, feeling motivated.",
+      "exercises": [
+        {
+          "name": "Push-ups",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Bodyweight squats",
+          "sets": 3,
+          "reps": 18,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Plank",
+          "sets": 2,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-02-25",
+      "notes": null,
+      "exercises": [
+        {
+          "name": "Dumbbell bench press",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell rows",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Lunges",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Jumping rope",
+          "sets": 3,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 2
+        }
+      ]
+    },
+    {
+      "date": "2026-02-28",
+      "notes": "Friday night workout, bit tired but pushed through.",
+      "exercises": [
+        {
+          "name": "Push-ups",
+          "sets": 3,
+          "reps": 14,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell curls",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 3,
+          "duration_mins": null
+        },
+        {
+          "name": "Tricep dips",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": null,
+          "duration_mins": null
+        }
+      ]
+    },
+    {
+      "date": "2026-03-02",
+      "notes": "Skipped weekend, back on track Monday.",
+      "exercises": [
+        {
+          "name": "Bodyweight squats",
+          "sets": 4,
+          "reps": 20,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Walking lunges",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Glute bridges",
+          "sets": 3,
+          "reps": 15,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Plank",
+          "sets": 3,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-03-05",
+      "notes": "Midterms week but still found time to train.",
+      "exercises": [
+        {
+          "name": "Push-ups",
+          "sets": 3,
+          "reps": 15,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell rows",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell shoulder press",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": 3,
+          "duration_mins": null
+        }
+      ]
+    },
+    {
+      "date": "2026-03-08",
+      "notes": null,
+      "exercises": [
+        {
+          "name": "Jumping jacks",
+          "sets": 3,
+          "reps": 30,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Burpees",
+          "sets": 3,
+          "reps": 8,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Mountain climbers",
+          "sets": 3,
+          "reps": 20,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "High knees",
+          "sets": 2,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 2
+        }
+      ]
+    },
+    {
+      "date": "2026-03-10",
+      "notes": "Focused on upper body today.",
+      "exercises": [
+        {
+          "name": "Push-ups",
+          "sets": 4,
+          "reps": 16,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell bench press",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell curls",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 3,
+          "duration_mins": null
+        },
+        {
+          "name": "Tricep dips",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Plank",
+          "sets": 3,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 1
+        }
+      ]
+    },
+    {
+      "date": "2026-03-13",
+      "notes": "Long gap due to exams, but feeling ready to get back.",
+      "exercises": [
+        {
+          "name": "Bodyweight squats",
+          "sets": 3,
+          "reps": 20,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Lunges",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Glute bridges",
+          "sets": 3,
+          "reps": 15,
+          "weight_kg": null,
+          "duration_mins": null
+        }
+      ]
+    },
+    {
+      "date": "2026-03-15",
+      "notes": "Full body workout to catch up.",
+      "exercises": [
+        {
+          "name": "Push-ups",
+          "sets": 3,
+          "reps": 14,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Bodyweight squats",
+          "sets": 3,
+          "reps": 18,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell rows",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Plank",
+          "sets": 3,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 1
+        },
+        {
+          "name": "Jumping jacks",
+          "sets": 2,
+          "reps": 30,
+          "weight_kg": null,
+          "duration_mins": null
+        }
+      ]
+    },
+    {
+      "date": "2026-03-17",
+      "notes": null,
+      "exercises": [
+        {
+          "name": "Dumbbell bench press",
+          "sets": 3,
+          "reps": 11,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell shoulder press",
+          "sets": 3,
+          "reps": 10,
+          "weight_kg": 3,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell lateral raises",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 2,
+          "duration_mins": null
+        }
+      ]
+    },
+    {
+      "date": "2026-03-18",
+      "notes": "Quick session, still busy with assignments.",
+      "exercises": [
+        {
+          "name": "Bodyweight squats",
+          "sets": 3,
+          "reps": 25,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Walking lunges",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Jump squats",
+          "sets": 2,
+          "reps": 10,
+          "weight_kg": null,
+          "duration_mins": null
+        }
+      ]
+    },
+    {
+      "date": "2026-03-19",
+      "notes": "Quick morning session before classes. Felt good today.",
+      "exercises": [
+        {
+          "name": "Push-ups",
+          "sets": 3,
+          "reps": 15,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Bodyweight squats",
+          "sets": 3,
+          "reps": 20,
+          "weight_kg": null,
+          "duration_mins": null
+        },
+        {
+          "name": "Dumbbell rows",
+          "sets": 3,
+          "reps": 12,
+          "weight_kg": 5,
+          "duration_mins": null
+        },
+        {
+          "name": "Plank",
+          "sets": 3,
+          "reps": null,
+          "weight_kg": null,
+          "duration_mins": 1
+        },
+        {
+          "name": "Jumping jacks",
+          "sets": 2,
+          "reps": 30,
+          "weight_kg": null,
+          "duration_mins": null
+        }
+      ]
+    }
+  ]
+}
