@@ -6,11 +6,19 @@ import httpx
 from app.db.session import engine
 from app.db.models import Base
 from app.routes.example import router as example_router
+from app.routes.analyze_workout import router as analyze_workout_router
+from app.routes.generate_gym_profile import router as generate_gym_profile_router
+from app.routes.analyze_workout_history import router as analyze_workout_history_router
+from app.routes.generate_gym_chat_completions import router as gym_chat_router
 
 load_dotenv()
 
 app = FastAPI()
 app.include_router(example_router)
+app.include_router(analyze_workout_router)
+app.include_router(generate_gym_profile_router)
+app.include_router(analyze_workout_history_router)
+app.include_router(gym_chat_router)
 
 # get api keys, urls ,and models
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
