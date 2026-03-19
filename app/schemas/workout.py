@@ -4,8 +4,8 @@ from typing import Literal
 
 class WorkoutExercise(BaseModel):
     name: str
-    sets: int
-    reps: int
+    sets: int | None = None
+    reps: int | None = None
     weight_kg: float | None = None
     duration_mins: float | None = None
 
