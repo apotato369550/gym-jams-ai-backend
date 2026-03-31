@@ -114,7 +114,29 @@ sudo usermod -aG docker $USER
 # then log out and back in, or run: newgrp docker
 ```
 
-### 4. Initialize database tables
+### 4. Connect to MySQL from the command line (optional)
+
+Once the container is running, you can inspect the database directly:
+
+```bash
+mysql -h 127.0.0.1 -P 3306 -u root -p
+# Enter your password when prompted
+```
+
+Useful commands once inside the MySQL shell:
+
+```sql
+SHOW DATABASES;              -- list all databases
+USE gym_jams_db;             -- switch to the project database
+SHOW TABLES;                 -- list all tables
+DESCRIBE users;              -- show columns for a table
+SELECT * FROM users;         -- view all rows in a table
+EXIT;                        -- quit the shell
+```
+
+---
+
+### 5. Initialize database tables
 
 ```bash
 python scripts/utils/initialize_sql_tables.py
@@ -122,7 +144,7 @@ python scripts/utils/initialize_sql_tables.py
 
 Safe to re-run — drops and recreates all tables.
 
-### 5. (Optional) Seed sample data
+### 6. (Optional) Seed sample data
 
 ```bash
 python scripts/utils/seed_sql_tables.py
@@ -130,7 +152,7 @@ python scripts/utils/seed_sql_tables.py
 
 Inserts 3 test personas: Maria Santos (beginner), Jake Reyes (bulker), Ana Cruz (endurance runner).
 
-### 6. Run the server
+### 7. Run the server
 
 ```bash
 uvicorn app.main:app --reload
