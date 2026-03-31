@@ -36,3 +36,37 @@ async def call_llm(system_prompt: str, user_message: str) -> dict:
             timeout=60.0,
         )
     return response.json()
+
+
+def extract_json_content(raw: dict) -> dict:
+    import re
+    try:
+        content = raw["choices"][0]["message"]["content"].strip()
+    except (KeyError, IndexError):
+        return {"error": "malformed_envelope", "raw": raw}
+    if content.startswith("```"):
+        content = re.sub(r"^```(?:json)?\n?", "", content)
+        content = re.sub(r"\n?```$", "", content).strip()
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", content, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group())
+            except json.JSONDecodeError:
+                pass
+    return {"raw_text": content}
+
+
+def extract_text_content(raw: dict) -> str:
+    try:
+        return raw["choices"][0]["message"]["content"]
+    except (KeyError, IndexError):
+        return ""
+
+
+def build_response(formatted: dict, raw: dict, debug: bool) -> dict:
+    if debug:
+        return {"formatted": formatted, "raw": raw}
+    return formatted

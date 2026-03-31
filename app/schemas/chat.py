@@ -11,3 +11,5 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
     user_profile: UserProfile
+    test: bool = False
+    debug: bool = False

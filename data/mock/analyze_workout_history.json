@@ -1,0 +1,10 @@
+{
+  "consistency_score": 72,
+  "consistency_note": "Mock: Solid attendance over the range — minor drop-off in week 3 but recovered.",
+  "top_3_exercises": ["Squat", "Romanian Deadlift", "Pull-Up"],
+  "volume_trend": "increasing",
+  "volume_note": "Mock: Weekly volume climbed ~8% over the period. Sustainable trajectory.",
+  "plateaus_detected": ["Bench Press — load stalled at 80kg for 3 sessions"],
+  "trajectory_suggestion": "Mock: Introduce a deload week, then test a new bench max.",
+  "thing_youre_doing_well": "Mock: Lower body frequency is excellent. Squat and hinge patterns both trending up."
+}
