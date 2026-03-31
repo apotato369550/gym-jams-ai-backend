@@ -1,179 +1,190 @@
 # Gym Jams AI Backend
 
-FastAPI backend service for Gym Jams.
-Handles AI inference (via OpenRouter), API routing, and database persistence.
+FastAPI backend for Gym Jams. Handles AI inference via OpenRouter, JWT auth, and MySQL persistence.
 
 ---
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 gym-jams-ai-backend/
 ├── app/
-│   ├── __init__.py
-│   ├── main.py              # FastAPI entrypoint
-│   │
-│   ├── core/
-│   │   ├── __init__.py
-│   │   └── config.py        # env loading + config values
-│   │
+│   ├── main.py                  # entrypoint, auth endpoints (/register_user, /login_user)
+│   ├── core/config.py           # DB_URL construction from env
 │   ├── db/
-│   │   ├── __init__.py
-│   │   ├── session.py       # SQLAlchemy async engine/session
-│   │   └── models.py        # ORM models
-│   │
+│   │   ├── session.py           # async SQLAlchemy engine + get_db()
+│   │   └── models.py            # 8 ORM models (User, UserProfile, GymProfile, WorkoutSession, WorkoutExercise, WorkoutAnalysisResult, WorkoutHistorySummary, ChatMessage)
 │   ├── routes/
-│   │   ├── __init__.py
-│   │   └── example.py       # API routes
-│   │
+│   │   ├── analyze_workout.py
+│   │   ├── analyze_workout_history.py
+│   │   ├── generate_gym_profile.py
+│   │   └── generate_gym_chat_completions.py
+│   ├── schemas/
+│   │   ├── workout.py
+│   │   ├── user_profile.py
+│   │   └── chat.py
 │   └── services/
-│       ├── __init__.py
-│       └── llm.py           # OpenRouter calls
-│
-├── .env                     # environment variables (NOT committed)
-├── .gitignore
+│       └── llm.py               # call_llm, extract_json_content, extract_text_content, build_response
+├── data/
+│   ├── mock/                    # static mock responses (4 files, one per AI endpoint)
+│   ├── sample_workout_data/
+│   ├── sample_workout_history_data/
+│   └── user_profile.json
+├── scripts/
+│   ├── testing/                 # per-endpoint test scripts (support --test and --debug flags)
+│   │   ├── test_analyze_workout.py
+│   │   ├── test_analyze_workout_history.py
+│   │   ├── test_generate_gym_profile.py
+│   │   └── test_generate_gym_chat_completions.py
+│   └── utils/
+│       ├── initialize_sql_tables.py   # drops and recreates all 8 tables
+│       ├── seed_sql_tables.py         # seeds 3 test personas (Maria, Jake, Ana)
+│       ├── test_users.py              # end-to-end auth test (register → login → cleanup)
+│       └── verify_data_integrity.py   # checks for orphaned rows
+├── results/                     # saved test outputs (gitignored)
+├── prompts/                     # LLM system prompts
 ├── requirements.txt
+├── .env
 └── README.md
 ```
 
 ---
 
-## ⚙️ Setup
+## Setup
 
-### 1. Create virtual environment
+### 1. Clone and create venv
 
 ```bash
 python -m venv venv
-```
-
-Activate:
-
-**Windows**
-
-```bash
-venv\Scripts\activate
-```
-
-**Linux/Mac**
-
-```bash
-source venv/bin/activate
-```
-
----
-
-### 2. Install dependencies
-
-```bash
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
 pip install -r requirements.txt
 ```
 
----
+### 2. Configure .env
 
-### 3. Configure environment variables
-
-Create `.env` in root:
+Create `.env` at project root with:
 
 ```
-# ========================
-# App
-# ========================
 APP_ENV=dev
-
-# ========================
-# OpenRouter (LLM)
-# ========================
 OPENROUTER_API_KEY=your_key_here
 OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
 MODEL=meta-llama/llama-3-8b-instruct
-
-# ========================
-# Database 
-# ========================
-DB_HOST=localhost
+DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=root
-DB_NAME=gym_jams
-
+DB_PASSWORD=your_password
+DB_NAME=gym_jams_db
+JWT_SECRET=your_random_secret_string
 ```
 
----
+Note: use `127.0.0.1` not `localhost` — Docker binds TCP, not Unix socket.
 
-## 🚀 Run the server
+### 3. Start the MySQL database (Docker)
 
-From project root:
+Docker packages MySQL into a container, isolated and easy to start/stop.
+
+Pull the MySQL image:
+
+```bash
+docker pull mysql:8.0
+```
+
+Start the container:
+
+```bash
+docker run -d \
+  --name gym-jams-db \
+  -e MYSQL_ROOT_PASSWORD=your_password \
+  -e MYSQL_DATABASE=gym_jams_db \
+  -p 3306:3306 \
+  mysql:8.0
+```
+
+Wait about 15 seconds for MySQL to initialize, then verify:
+
+```bash
+docker ps   # should show gym-jams-db running with 0.0.0.0:3306->3306/tcp
+```
+
+If you get a permission denied error on docker:
+
+```bash
+sudo usermod -aG docker $USER
+# then log out and back in, or run: newgrp docker
+```
+
+### 4. Initialize database tables
+
+```bash
+python scripts/utils/initialize_sql_tables.py
+```
+
+Safe to re-run — drops and recreates all tables.
+
+### 5. (Optional) Seed sample data
+
+```bash
+python scripts/utils/seed_sql_tables.py
+```
+
+Inserts 3 test personas: Maria Santos (beginner), Jake Reyes (bulker), Ana Cruz (endurance runner).
+
+### 6. Run the server
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-Docs:
-
-```
-http://127.0.0.1:8000/docs
-```
+Docs: http://127.0.0.1:8000/docs
 
 ---
 
-## 🗄️ Database Notes
+## API Endpoints
 
-### Local Development (recommended)
+- **GET** `/` — health check
+- **GET** `/health` — service alive
+- **POST** `/register_user` — register with email/password/name
+- **POST** `/login_user` — returns JWT token
+- **POST** `/analyze_workout` — AI workout analysis
+- **POST** `/generate_gym_profile` — AI gym persona profile
+- **POST** `/analyze_workout_history` — AI history trends
+- **POST** `/generate_gym_chat_completions` — AI chat
 
-Run MariaDB locally:
+All AI endpoints accept `test: bool` (mock mode, no credits) and `debug: bool` (returns raw + formatted).
+
+---
+
+## Testing
+
+### End-to-end auth test
 
 ```bash
-docker run -d -p 3306:3306 \
--e MYSQL_ROOT_PASSWORD=root \
--e MYSQL_DATABASE=gym_jams \
-mariadb:11
+python scripts/utils/test_users.py
 ```
 
-Used for:
-
-* development
-* testing
-* migrations
-
----
-
-### School Database
-
-The DCISM MySQL instance:
-
-* accessible via **phpMyAdmin**
-* often **blocked from direct external access**
-* typically only reachable internally
-
-Use workflow:
-
-```
-local dev → export SQL → import via phpMyAdmin
-```
-
----
-
-## 🧪 Quick Test
+### AI endpoint tests (no credits with --test)
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/chat?prompt=hello"
+python scripts/testing/test_analyze_workout.py --test
+python scripts/testing/test_generate_gym_profile.py --test
+python scripts/testing/test_analyze_workout_history.py --test
+python scripts/testing/test_generate_gym_chat_completions.py --test
+
+# Add --debug to see raw + formatted output side by side
+python scripts/testing/test_analyze_workout.py --test --debug
+```
+
+### Data integrity check
+
+```bash
+python scripts/utils/verify_data_integrity.py
 ```
 
 ---
 
-## 🔒 Notes
+## Notes
 
-* `.env` is ignored via `.gitignore`
-* never commit credentials
-* use environment switching for dev/prod
-
----
-
-## 📌 Future Improvements
-
-* Alembic migrations
-* structured logging
-* retries + circuit breakers
-* streaming responses (LLM)
-
----
+- `.env` is gitignored — never commit credentials
+- `results/` stores test outputs locally
+- No migration tooling — schema changes require re-running `initialize_sql_tables.py`
