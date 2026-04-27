@@ -1,8 +1,10 @@
 from pathlib import Path
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from app.schemas.user_profile import UserProfile
 from app.services.llm import call_llm, load_prompt, extract_json_content, build_response
+from app.core.auth import get_current_user
+from app.db.models import User
 import json
 
 router = APIRouter()
@@ -15,7 +17,7 @@ class GenerateGymProfileRequest(BaseModel):
     debug: bool = False
 
 @router.post("/generate_gym_profile")
-async def generate_gym_profile(request: GenerateGymProfileRequest):
+async def generate_gym_profile(request: GenerateGymProfileRequest, current_user: User = Depends(get_current_user)):
     if request.test:
         with open(MOCK_PATH) as f:
             return json.load(f)

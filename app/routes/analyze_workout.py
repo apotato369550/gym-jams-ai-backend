@@ -1,8 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.schemas.user_profile import UserProfile
 from app.schemas.workout import WorkoutSession
 from pathlib import Path
 from app.services.llm import call_llm, load_prompt, extract_json_content, build_response
+from app.core.auth import get_current_user
+from app.db.models import User
 from pydantic import BaseModel
 import json
 
@@ -17,7 +19,7 @@ class AnalyzeWorkoutRequest(BaseModel):
     debug: bool = False
 
 @router.post("/analyze_workout")
-async def analyze_workout(request: AnalyzeWorkoutRequest):
+async def analyze_workout(request: AnalyzeWorkoutRequest, current_user: User = Depends(get_current_user)):
     if request.test:
         with open(MOCK_PATH) as f:
             return json.load(f)

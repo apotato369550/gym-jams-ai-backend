@@ -10,6 +10,7 @@ from app.routes.analyze_workout import router as analyze_workout_router
 from app.routes.generate_gym_profile import router as generate_gym_profile_router
 from app.routes.analyze_workout_history import router as analyze_workout_history_router
 from app.routes.generate_gym_chat_completions import router as gym_chat_router
+from app.routes.chat import router as chat_router
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException
 from pydantic import BaseModel, EmailStr, Field
@@ -29,6 +30,7 @@ app.include_router(analyze_workout_router)
 app.include_router(generate_gym_profile_router)
 app.include_router(analyze_workout_history_router)
 app.include_router(gym_chat_router)
+app.include_router(chat_router)
 
 JWT_SECRET = os.getenv("JWT_SECRET", "changeme")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -97,24 +99,3 @@ async def login_user(request: LoginRequest, db: AsyncSession = Depends(get_db)):
     return {"user_id": user.id, "email": user.email, "token": token}
 
 
-# basic chat endpoint
-@app.post("/chat")
-async def chat(prompt: str):
-    print("API KEY:", os.getenv("OPENROUTER_API_KEY"))
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            f"{BASE_URL}/chat/completions",
-            headers={
-                "Authorization": f"Bearer {OPENROUTER_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": MODEL,
-                "messages": [
-                    {"role": "user", "content": prompt}
-                ],
-            },
-            timeout=30.0
-        )
-
-    return response.json()

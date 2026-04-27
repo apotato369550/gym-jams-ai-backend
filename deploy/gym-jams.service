@@ -1,0 +1,19 @@
+[Unit]
+Description=gym-jams-ai-backend FastAPI service
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/gym-jams-ai-backend
+EnvironmentFile=/home/ec2-user/gym-jams-ai-backend/.env
+ExecStart=/home/ec2-user/gym-jams-ai-backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

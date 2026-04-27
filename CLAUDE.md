@@ -65,6 +65,11 @@ Each request model has `test: bool = False` and `debug: bool = False`.
 - `/login_user` — verifies bcrypt, returns `{user_id, email, token}` (JWT HS256, 24h expiry)
 - JWT secret from `JWT_SECRET` env var
 
+**Auth enforcement (in `app/core/auth.py`):**
+- `get_current_user` FastAPI dependency reads `Authorization: Bearer <token>`, decodes with `JWT_SECRET` HS256, looks up `User` by `sub`. Raises 401 on missing/invalid/expired token or unknown user.
+- All 4 AI routes use it via `Depends(get_current_user)`. Mock mode (`test=True`) still requires a valid token.
+- `/`, `/health`, `/register_user`, `/login_user` remain public.
+
 **DB startup behavior:** connection failure is non-fatal — logs error and continues.
 
 ## Environment
@@ -99,6 +104,10 @@ Note: `DB_HOST=127.0.0.1` required for Docker TCP binding (not `localhost`).
 ## Adding Routes
 
 Create file in `app/routes/`, define `APIRouter`, register in `app/main.py`. For AI routes: add `test: bool = False` and `debug: bool = False` to the request model, add a `MOCK_PATH` constant, follow the `call_llm` → `extract_json_content` → `build_response` pattern. Add mock file to `data/mock/`.
+
+## Deployment
+
+EC2 deployment macro lives at `deploy/deploy.sh` — idempotent, run from local machine, takes `EC2_HOST` + `PEM_PATH` env vars. See `docs/DEPLOYMENT.md` for the full runbook and `docs/API_USAGE.md` for an undergrad-friendly endpoint guide (with `docs/postman_collection.json` importable into Postman). Use `SKIP_DB_INIT=1` on redeploys to preserve data.
 
 ## DB Notes
 
