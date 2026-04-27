@@ -2,3 +2,11 @@ fastapi
 python-dotenv
 httpx
 uvicorn
+sqlalchemy
+aiomysql
+pydantic
+passlib[bcrypt]
+bcrypt==4.0.1
+python-jose[cryptography]
+mysql-connector-python
+pydantic[email]

@@ -1,0 +1,45 @@
+{
+  "id": "gen-1773900807-eaZCL2mCTnev7tYXARji",
+  "object": "chat.completion",
+  "created": 1773900807,
+  "model": "meta-llama/llama-3-8b-instruct",
+  "provider": "Novita",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Kumusta, Maria! I got you back!\n\n15 minutes is better than nothing, and you can do something to get your blood pumping without needing any equipment at all. How about a quick bodyweight routine? I can guide you through some simple exercises to get you moving and prepare you for a more energetic study session later.\n\nTry this:\n\n1. Warm-up: Jumping jacks (30 seconds)\n2. Squats: 10 reps\n3. Push-ups: 10 reps (modify on your knees if needed)\n4. Plank: 30-second hold\n5. Mountain climbers: 30 seconds\n6. Wall sit: 30 seconds\n7. Cool-down: Static stretch (30 seconds each leg and back)\n\nFeel free to rest when needed, but try to keep moving. Remember to breathe and listen to your body.\n\nHow's that sound? You in?",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 640,
+    "completion_tokens": 181,
+    "total_tokens": 821,
+    "cost": 3.284e-05,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 3.284e-05,
+      "upstream_inference_prompt_cost": 2.56e-05,
+      "upstream_inference_completions_cost": 7.24e-06
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

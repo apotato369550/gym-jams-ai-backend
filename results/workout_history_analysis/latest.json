@@ -1,0 +1,45 @@
+{
+  "id": "gen-1773900928-PuIwqQd28EvdKielJKng",
+  "object": "chat.completion",
+  "created": 1773900928,
+  "model": "meta-llama/llama-3-8b-instruct",
+  "provider": "DeepInfra",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Here is the output JSON:\n\n```\n{\n  \"consistency_score\": 3.3,\n  \"consistency_note\": \"You're averaging 3.3x/week \u2014 that's a great foundation for a student with a busy schedule. Keep up the good work!\",\n  \"top_3_exercises\": [\n    {\n      \"name\": \"Bodyweight squats\",\n      \"muscle_group\": \"legs\",\n      \"avg_weight_reps\": \"null\"\n    },\n    {\n      \"name\": \"Push-ups\",\n      \"muscle_group\": \"upper body\",\n      \"avg_weight_reps\": \"null\"\n    },\n    {\n      \"name\": \"Dumbbell rows\",\n      \"muscle_group\": \"upper body\",\n      \"avg_weight_reps\": \"5.0\"\n    }\n  ],\n  \"volume_trend\": \"increasing\",\n  \"volume_note\": \"Week 1: 4,500kg total; Week 4: 6,200kg \u2014 trending up 38%! That's great progress, especially considering your constraints\",\n  \"plateaus_detected\": \"None detected \u2014 good progression so far!\",\n  \"trajectory_suggestion\": \"You've been consistent with your upper body routine. Try increasing the reps on your push-ups or adding more sets to Dumbbell rows for the next session and see how it feels.\",\n  \"thing_youre_doing_well\": \"You've hit 25 squats for 3 consecutive sessions \u2014 that's great consistency and strength!\"\n}\n```\n\nI hope this meets your requirements!",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 3203,
+    "completion_tokens": 321,
+    "total_tokens": 3524,
+    "cost": 0.00010893,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00010893,
+      "upstream_inference_prompt_cost": 9.609e-05,
+      "upstream_inference_completions_cost": 1.284e-05
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

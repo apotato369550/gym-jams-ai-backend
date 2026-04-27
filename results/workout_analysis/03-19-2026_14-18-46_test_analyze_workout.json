@@ -1,0 +1,45 @@
+{
+  "id": "gen-1773901123-h8hKwMOGwQnMKyq8zszL",
+  "object": "chat.completion",
+  "created": 1773901123,
+  "model": "meta-llama/llama-3-8b-instruct",
+  "provider": "DeepInfra",
+  "system_fingerprint": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"total_volume_kg\": null,\n  \"total_reps\": 87,\n  \"muscle_groups_targeted\": [\"chest\", \"back\", \"legs\", \"shoulders\", \"core\"],\n  \"estimated_calories_burned\": 160-210,\n  \"intensity_rating\": 4,\n  \"observation\": \"Great consistency in your bodyweight exercises, Maria! You did a great job pushing through 3 sets of squats and 3 sets of rows \u2014 those'll help increase your strength and endurance. Keep up the good work!\"\n}",
+        "refusal": null,
+        "reasoning": null
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 836,
+    "completion_tokens": 117,
+    "total_tokens": 953,
+    "cost": 2.976e-05,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 2.976e-05,
+      "upstream_inference_prompt_cost": 2.508e-05,
+      "upstream_inference_completions_cost": 4.68e-06
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}
