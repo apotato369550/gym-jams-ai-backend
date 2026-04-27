@@ -2,6 +2,31 @@
 
 FastAPI backend for Gym Jams. Handles AI inference via OpenRouter, JWT auth, and MySQL persistence.
 
+## Documentation
+
+- 📘 **[API Usage Guide](docs/API_USAGE.md)** — undergrad-friendly walkthrough of every endpoint with curl + Postman examples. Start here if you've never hit a REST API before.
+- 🚀 **[Deployment Quickstart](docs/DEPLOYMENT.md)** — one-shot EC2 deploy via `deploy/deploy.sh`, day-2 ops, troubleshooting.
+- 📮 **[Postman Collection](docs/postman_collection.json)** — import into Postman; auto-saves your JWT after login.
+- 🛠️ **[CLAUDE.md](CLAUDE.md)** — architecture notes, request flow, conventions for contributors and AI assistants.
+
+## Quickstart
+
+**Local development:** see [Setup](#setup) below.
+
+**Deploy to EC2:** ([full guide](docs/DEPLOYMENT.md))
+```bash
+EC2_HOST=ec2-1-2-3-4.ap-northeast-1.compute.amazonaws.com \
+PEM_PATH=./your-key.pem \
+bash deploy/deploy.sh
+```
+
+**Hit the API:** ([full guide](docs/API_USAGE.md))
+```bash
+# Register, login, save the token, then call any AI endpoint with `Authorization: Bearer <token>`
+curl -X POST http://YOUR-HOST/register_user -H "Content-Type: application/json" \
+  -d '{"email":"alice@example.com","password":"supersecret123","name":"Alice"}'
+```
+
 ---
 
 ## Project Structure
@@ -43,6 +68,8 @@ gym-jams-ai-backend/
 │       └── verify_data_integrity.py   # checks for orphaned rows
 ├── results/                     # saved test outputs (gitignored)
 ├── prompts/                     # LLM system prompts
+├── deploy/                      # EC2 deploy macro (deploy.sh) + nginx/systemd templates
+├── docs/                        # API usage guide, deployment quickstart, Postman collection
 ├── requirements.txt
 ├── .env
 └── README.md
@@ -171,9 +198,12 @@ Docs: http://127.0.0.1:8000/docs
 - **POST** `/analyze_workout` — AI workout analysis
 - **POST** `/generate_gym_profile` — AI gym persona profile
 - **POST** `/analyze_workout_history` — AI history trends
-- **POST** `/generate_gym_chat_completions` — AI chat
+- **POST** `/generate_gym_chat_completions` — AI chat (uses your `user_profile` for personalized replies)
+- **POST** `/chat` — lightweight conversation with Coach J, the fitness agent (no profile required)
 
-All AI endpoints accept `test: bool` (mock mode, no credits) and `debug: bool` (returns raw + formatted).
+All AI endpoints require `Authorization: Bearer <token>` (obtained from `/login_user`) and accept `test: bool` (mock mode, no credits) and `debug: bool` (returns raw + formatted).
+
+Full request/response examples and Postman steps in **[docs/API_USAGE.md](docs/API_USAGE.md)**.
 
 ---
 

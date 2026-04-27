@@ -1,0 +1,135 @@
+{
+  "info": {
+    "name": "gym-jams API",
+    "description": "Postman collection for the gym-jams-ai-backend. Set the `baseUrl` collection variable, run Register, run Login (auto-saves token), then any AI endpoint.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+      }
+    },
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/register_user", "host": ["{{baseUrl}}"], "path": ["register_user"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"supersecret123\",\n  \"name\": \"Alice\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.token) {",
+              "  pm.collectionVariables.set('token', json.token);",
+              "  console.log('Saved token to collection variable.');",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/login_user", "host": ["{{baseUrl}}"], "path": ["login_user"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"supersecret123\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Analyze Workout",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/analyze_workout", "host": ["{{baseUrl}}"], "path": ["analyze_workout"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"test\": true,\n  \"debug\": false,\n  \"workout\": {\n    \"date\": \"2026-04-27\",\n    \"exercises\": [\n      {\"name\": \"Bench Press\", \"sets\": 3, \"reps\": 8, \"weight_kg\": 60}\n    ],\n    \"notes\": \"felt strong today\"\n  },\n  \"user_profile\": {\n    \"name\": \"Alice\",\n    \"age_range\": \"19-24\",\n    \"height_cm\": 165,\n    \"weight_kg\": 60,\n    \"location\": \"Manila\",\n    \"activity_level\": \"active\",\n    \"goal\": \"gain_muscle\",\n    \"intent\": \"build strength\",\n    \"constraints\": []\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Generate Gym Profile",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/generate_gym_profile", "host": ["{{baseUrl}}"], "path": ["generate_gym_profile"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"test\": true,\n  \"debug\": false,\n  \"user_profile\": {\n    \"name\": \"Alice\",\n    \"age_range\": \"19-24\",\n    \"height_cm\": 165,\n    \"weight_kg\": 60,\n    \"location\": \"Manila\",\n    \"activity_level\": \"active\",\n    \"goal\": \"gain_muscle\",\n    \"intent\": \"build strength\",\n    \"constraints\": []\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Analyze Workout History",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/analyze_workout_history", "host": ["{{baseUrl}}"], "path": ["analyze_workout_history"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"test\": true,\n  \"debug\": false,\n  \"history\": {\n    \"range\": \"week\",\n    \"sessions\": [\n      {\"date\": \"2026-04-20\", \"exercises\": [{\"name\": \"Squat\", \"sets\": 5, \"reps\": 5, \"weight_kg\": 80}], \"notes\": null},\n      {\"date\": \"2026-04-22\", \"exercises\": [{\"name\": \"Bench\", \"sets\": 3, \"reps\": 8, \"weight_kg\": 60}], \"notes\": null}\n    ]\n  },\n  \"user_profile\": {\n    \"name\": \"Alice\",\n    \"age_range\": \"19-24\",\n    \"height_cm\": 165,\n    \"weight_kg\": 60,\n    \"location\": \"Manila\",\n    \"activity_level\": \"active\",\n    \"goal\": \"gain_muscle\",\n    \"intent\": \"build strength\",\n    \"constraints\": []\n  }\n}"
+        }
+      }
+    },
+    {
+      "name": "Chat (Coach J)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/chat", "host": ["{{baseUrl}}"], "path": ["chat"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"test\": true,\n  \"debug\": false,\n  \"messages\": [\n    {\"role\": \"user\", \"content\": \"what's a good warmup for leg day?\"}\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "Gym Chat",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/generate_gym_chat_completions", "host": ["{{baseUrl}}"], "path": ["generate_gym_chat_completions"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"test\": true,\n  \"debug\": false,\n  \"messages\": [\n    {\"role\": \"user\", \"content\": \"what's a good warmup for leg day?\"}\n  ],\n  \"user_profile\": {\n    \"name\": \"Alice\",\n    \"age_range\": \"19-24\",\n    \"height_cm\": 165,\n    \"weight_kg\": 60,\n    \"location\": \"Manila\",\n    \"activity_level\": \"active\",\n    \"goal\": \"gain_muscle\",\n    \"intent\": \"build strength\",\n    \"constraints\": []\n  }\n}"
+        }
+      }
+    }
+  ]
+}
