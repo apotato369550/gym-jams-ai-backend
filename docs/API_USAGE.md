@@ -41,6 +41,8 @@ A friendly walkthrough of the gym-jams API. If you've never used a REST API befo
 | GET    | `/health`                         | no             | Health check                               |
 | POST   | `/register_user`                  | no             | Create an account                          |
 | POST   | `/login_user`                     | no             | Get a JWT token                            |
+| POST   | `/user_profile`                   | **yes**        | Save (create or update) your profile       |
+| GET    | `/user_profile`                   | **yes**        | Fetch your saved profile                   |
 | POST   | `/analyze_workout`                | **yes**        | Get AI feedback on a single workout        |
 | POST   | `/generate_gym_profile`           | **yes**        | Generate a personality-style gym archetype |
 | POST   | `/analyze_workout_history`        | **yes**        | AI summary across multiple workouts        |
@@ -147,6 +149,41 @@ If you forget the `Authorization` header, you get `401`:
 ---
 
 ## 3. Reference — every protected endpoint
+
+### `POST /user_profile` — save your profile
+
+Create or update your profile. Send this once after registration; update it any time your stats change.
+
+```bash
+curl -X POST http://YOUR-EC2-HOST/user_profile \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "name": "Alice",
+    "age_range": "19-24",
+    "height_cm": 165,
+    "weight_kg": 60,
+    "location": "Manila",
+    "activity_level": "active",
+    "goal": "gain_muscle",
+    "intent": "build strength for volleyball",
+    "constraints": ["no squat rack at home"]
+  }'
+```
+
+Response (`200`):
+```json
+{"message": "Profile saved", "user_id": 1}
+```
+
+### `GET /user_profile` — fetch your profile
+
+```bash
+curl http://YOUR-EC2-HOST/user_profile \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+Returns the same shape as the `user_profile` object you POST. Returns `404` if you haven't saved one yet.
 
 ### `/analyze_workout`
 

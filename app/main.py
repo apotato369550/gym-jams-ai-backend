@@ -11,6 +11,7 @@ from app.routes.generate_gym_profile import router as generate_gym_profile_route
 from app.routes.analyze_workout_history import router as analyze_workout_history_router
 from app.routes.generate_gym_chat_completions import router as gym_chat_router
 from app.routes.chat import router as chat_router
+from app.routes.user_profile import router as user_profile_router
 from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException
 from pydantic import BaseModel, EmailStr, Field
@@ -31,6 +32,7 @@ app.include_router(generate_gym_profile_router)
 app.include_router(analyze_workout_history_router)
 app.include_router(gym_chat_router)
 app.include_router(chat_router)
+app.include_router(user_profile_router)
 
 JWT_SECRET = os.getenv("JWT_SECRET", "changeme")
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
