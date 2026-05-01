@@ -43,13 +43,20 @@ gym-jams-ai-backend/
 │   │   ├── analyze_workout.py
 │   │   ├── analyze_workout_history.py
 │   │   ├── generate_gym_profile.py
-│   │   └── generate_gym_chat_completions.py
+│   │   ├── generate_gym_chat_completions.py
+│   │   ├── chat.py
+│   │   ├── user_profile.py
+│   │   ├── gym_profile.py                    # GET only
+│   │   ├── workout_sessions.py               # GET list + detail
+│   │   ├── workout_history_summaries.py      # GET latest
+│   │   └── chat_messages.py                  # GET (with 24h soft-delete reset)
 │   ├── schemas/
 │   │   ├── workout.py
 │   │   ├── user_profile.py
 │   │   └── chat.py
 │   └── services/
-│       └── llm.py               # call_llm, extract_json_content, extract_text_content, build_response
+│       ├── llm.py               # call_llm, extract_json_content, extract_text_content, build_response
+│       └── chat_persistence.py  # save_turn + 24h soft-delete (expire_old_messages)
 ├── data/
 │   ├── mock/                    # static mock responses (4 files, one per AI endpoint)
 │   ├── sample_workout_data/
@@ -195,13 +202,20 @@ Docs: http://127.0.0.1:8000/docs
 - **GET** `/health` — service alive
 - **POST** `/register_user` — register with email/password/name
 - **POST** `/login_user` — returns JWT token
-- **POST** `/analyze_workout` — AI workout analysis
-- **POST** `/generate_gym_profile` — AI gym persona profile
-- **POST** `/analyze_workout_history` — AI history trends
-- **POST** `/generate_gym_chat_completions` — AI chat (uses your `user_profile` for personalized replies)
-- **POST** `/chat` — lightweight conversation with Coach J, the fitness agent (no profile required)
+- **POST** `/user_profile` / **GET** `/user_profile` — save/fetch your profile
+- **POST** `/analyze_workout` — AI workout analysis (persists session + exercises + analysis)
+- **POST** `/generate_gym_profile` — AI gym persona profile (upserts your gym profile)
+- **POST** `/analyze_workout_history` — AI history trends (persists summary)
+- **POST** `/generate_gym_chat_completions` — AI chat (persists turns; 24h auto-reset)
+- **POST** `/chat` — lightweight Coach J chat (persists turns; 24h auto-reset)
+- **GET** `/gym_profile` — fetch latest generated archetype
+- **GET** `/workout_sessions` / **GET** `/workout_sessions/{id}` — list / detail
+- **GET** `/workout_history_summaries?range=week|month|3months` — latest summary
+- **GET** `/chat_messages` — paginated chat history (auto-resets every 24h via soft-delete)
 
-All AI endpoints require `Authorization: Bearer <token>` (obtained from `/login_user`) and accept `test: bool` (mock mode, no credits) and `debug: bool` (returns raw + formatted).
+All AI endpoints require `Authorization: Bearer <token>` (obtained from `/login_user`) and accept `test: bool` (mock mode — no LLM credits AND no DB writes) and `debug: bool` (returns raw + formatted).
+
+**Data lifecycle.** Register → POST `/user_profile` → POST any AI endpoint (results saved automatically) → later, GET to read history. The `test=true` flag bypasses both the LLM and DB writes, so you can experiment freely without polluting your data.
 
 Full request/response examples and Postman steps in **[docs/API_USAGE.md](docs/API_USAGE.md)**.
 

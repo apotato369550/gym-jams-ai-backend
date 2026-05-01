@@ -193,8 +193,10 @@ def main():
                 content     TEXT                        NOT NULL,
                 image_url   VARCHAR(500)                NULL,
                 created_at  DATETIME                    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                deleted_at  DATETIME                    NULL,
                 PRIMARY KEY (id),
                 KEY idx_chat_messages_user_id (user_id),
+                KEY idx_chat_messages_deleted_at (deleted_at),
                 CONSTRAINT fk_chat_messages_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
         """)

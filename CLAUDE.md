@@ -43,18 +43,27 @@ FastAPI backend with async MySQL (SQLAlchemy + aiomysql) and LLM inference via O
 
 **Request flow:**
 - `app/main.py` — entrypoint; registers routers; handles startup (`Base.metadata.create_all`); contains `/register_user` and `/login_user` directly (not in routes/)
-- `app/routes/` — 4 AI route modules; each uses `call_llm` → `extract_json_content` → `build_response` pipeline
+- `app/routes/` — AI POSTs (`analyze_workout`, `analyze_workout_history`, `generate_gym_profile`, `chat`, `generate_gym_chat_completions`) + read-only GETs (`user_profile`, `gym_profile`, `workout_sessions`, `workout_history_summaries`, `chat_messages`). AI POSTs use `call_llm` → `extract_json_content` → **persist to DB** → `build_response`.
 - `app/db/session.py` — async engine + `get_db()` dependency
-- `app/db/models.py` — 8 ORM models: `User`, `UserProfile`, `GymProfile`, `WorkoutSession`, `WorkoutExercise`, `WorkoutAnalysisResult`, `WorkoutHistorySummary`, `ChatMessage`
+- `app/db/models.py` — 8 ORM models: `User`, `UserProfile`, `GymProfile`, `WorkoutSession`, `WorkoutExercise`, `WorkoutAnalysisResult`, `WorkoutHistorySummary`, `ChatMessage`. `ChatMessage` has a `deleted_at` column for soft-delete (24h chat reset). `WorkoutHistorySummary.range_period` is the column name (not `range`) to match `initialize_sql_tables.py`.
 - `app/core/config.py` — constructs `DB_URL` from env vars
 - `app/services/llm.py` — `call_llm()` (raw OpenRouter call), `extract_json_content()` (parses LLM JSON from content string, handles markdown fences + fallbacks), `extract_text_content()` (free-text extraction for chat), `build_response()` (wraps formatted/raw based on debug flag)
+- `app/services/chat_persistence.py` — `save_turn()` writes user+assistant rows after expiring messages older than 24h via `expire_old_messages()` (sets `deleted_at = now()`)
 - `app/schemas/` — Pydantic models: `WorkoutSession`, `WorkoutExercise`, `WorkoutHistory`, `UserProfile`, `ChatMessage`, `ChatRequest` (ChatRequest has `test` and `debug` bool fields)
 
-**AI endpoint pattern (all 4 routes):**
+**AI endpoint pattern (all routes):**
 Each request model has `test: bool = False` and `debug: bool = False`.
-- `test=True` → load from `data/mock/<endpoint>.json`, return immediately (no OpenRouter call)
+- `test=True` → load from `data/mock/<endpoint>.json`, return immediately (no OpenRouter call, **no DB writes**)
 - `debug=True` → return `{"formatted": ..., "raw": ...}` instead of just formatted
-- Normal → `call_llm` → `extract_json_content` → return structured dict
+- Normal → `call_llm` → `extract_json_content` → **persist result to DB** → return structured dict (analyze_workout/history responses include `session_id`/`summary_id`)
+
+**Persistence per route:**
+- `analyze_workout` → inserts `WorkoutSession` + `WorkoutExercise` rows + `WorkoutAnalysisResult`
+- `analyze_workout_history` → inserts `WorkoutHistorySummary`
+- `generate_gym_profile` → upserts `GymProfile` (one per user)
+- `chat` and `generate_gym_chat_completions` → both call `save_turn()` (user + assistant message rows). Messages older than 24h are soft-deleted on the next chat or `GET /chat_messages`.
+
+**LLM output keys must match DB column names** (no per-route translation): `read_description` (not `read`), `top_exercises` (not `top_3_exercises`). Both prompts and mocks were aligned to this — don't reintroduce the old names.
 
 **Exception: `generate_gym_chat_completions`** — uses `extract_text_content` (not JSON parsing) and returns `{"message": str}`. Its `test`/`debug` fields live on `ChatRequest` in `app/schemas/chat.py`.
 

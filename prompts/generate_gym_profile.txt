@@ -13,7 +13,7 @@ Analyze this profile and return a JSON object with these exact fields:
 
 1. "archetype": A short label that captures who they are as a mover (e.g., "The Reluctant Starter", "The Quiet Grinder", "The Time-Strapped Hustler", "The Form Perfectionist"). This should feel specific and a bit poetic, not clinical.
 
-2. "read": A 2-3 sentence personalized description of what kind of mover this person likely is. What's their vibe? What do you sense about their approach to movement?
+2. "read_description": A 2-3 sentence personalized description of what kind of mover this person likely is. What's their vibe? What do you sense about their approach to movement?
 
 3. "modalities_youll_enjoy": An array of 2-3 exercise modalities they'd probably connect with, given their lifestyle, constraints, location, and goal. Consider: bodyweight work, local gym access, outdoor movement, home workouts, group classes, sports, etc. Be specific to Filipino student life (basketball courts, parks, affordable gyms, home setups).
 

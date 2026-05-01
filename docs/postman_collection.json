@@ -130,6 +130,67 @@
           "raw": "{\n  \"test\": true,\n  \"debug\": false,\n  \"messages\": [\n    {\"role\": \"user\", \"content\": \"what's a good warmup for leg day?\"}\n  ],\n  \"user_profile\": {\n    \"name\": \"Alice\",\n    \"age_range\": \"19-24\",\n    \"height_cm\": 165,\n    \"weight_kg\": 60,\n    \"location\": \"Manila\",\n    \"activity_level\": \"active\",\n    \"goal\": \"gain_muscle\",\n    \"intent\": \"build strength\",\n    \"constraints\": []\n  }\n}"
         }
       }
+    },
+    {
+      "name": "Get Gym Profile",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/gym_profile", "host": ["{{baseUrl}}"], "path": ["gym_profile"] }
+      }
+    },
+    {
+      "name": "List Workout Sessions",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/workout_sessions?limit=20&offset=0",
+          "host": ["{{baseUrl}}"],
+          "path": ["workout_sessions"],
+          "query": [
+            { "key": "limit", "value": "20" },
+            { "key": "offset", "value": "0" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Workout Session",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/workout_sessions/1", "host": ["{{baseUrl}}"], "path": ["workout_sessions", "1"] }
+      }
+    },
+    {
+      "name": "Get Workout History Summary",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/workout_history_summaries?range=week",
+          "host": ["{{baseUrl}}"],
+          "path": ["workout_history_summaries"],
+          "query": [{ "key": "range", "value": "week" }]
+        }
+      }
+    },
+    {
+      "name": "List Chat Messages",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/chat_messages?limit=20&offset=0",
+          "host": ["{{baseUrl}}"],
+          "path": ["chat_messages"],
+          "query": [
+            { "key": "limit", "value": "20" },
+            { "key": "offset", "value": "0" }
+          ]
+        }
+      }
     }
   ]
 }
