@@ -83,7 +83,7 @@ class WorkoutHistorySummary(Base):
     __tablename__ = "workout_history_summaries"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    range: Mapped[str] = mapped_column(Enum("week", "month", "3months"), nullable=False)
+    range_period: Mapped[str] = mapped_column("range_period", Enum("week", "month", "3months"), nullable=False)
     consistency_score: Mapped[Optional[float]] = mapped_column(DECIMAL(4, 2), nullable=True)
     consistency_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     top_exercises: Mapped[str] = mapped_column(JSON, nullable=False)
@@ -103,3 +103,4 @@ class ChatMessage(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), nullable=False)
+    deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True, index=True)
