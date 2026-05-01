@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.chat import ChatRequest
 from app.services.llm import load_prompt, extract_text_content, build_response
+from app.services.chat_persistence import save_turn
 from app.core.auth import get_current_user
 from app.db.models import User
+from app.db.session import get_db
 import os
 import json
 import httpx
@@ -20,7 +23,11 @@ BASE_URL = os.getenv("OPENROUTER_BASE_URL")
 MODEL = os.getenv("MODEL")
 
 @router.post("/generate_gym_chat_completions")
-async def generate_gym_chat_completions(request: ChatRequest, current_user: User = Depends(get_current_user)):
+async def generate_gym_chat_completions(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     if request.test:
         with open(MOCK_PATH) as f:
             return json.load(f)
@@ -34,7 +41,7 @@ async def generate_gym_chat_completions(request: ChatRequest, current_user: User
     messages += [{"role": m.role, "content": m.content} for m in request.messages]
 
     async with httpx.AsyncClient() as client:
-        raw = await client.post(
+        response = await client.post(
             f"{BASE_URL}/chat/completions",
             headers={
                 "Authorization": f"Bearer {OPENROUTER_API_KEY}",
@@ -43,5 +50,12 @@ async def generate_gym_chat_completions(request: ChatRequest, current_user: User
             json={"model": MODEL, "messages": messages},
             timeout=60.0,
         )
-    formatted = {"message": extract_text_content(raw)}
+    raw = response.json()
+    assistant_text = extract_text_content(raw)
+    formatted = {"message": assistant_text}
+
+    last_user = next((m for m in reversed(request.messages) if m.role == "user"), None)
+    if last_user is not None:
+        await save_turn(db, current_user.id, last_user.content, assistant_text)
+
     return build_response(formatted, raw, request.debug)

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
 from typing import Literal
 from pathlib import Path
@@ -8,8 +9,10 @@ import httpx
 from dotenv import load_dotenv
 
 from app.services.llm import load_prompt, extract_text_content, build_response
+from app.services.chat_persistence import save_turn
 from app.core.auth import get_current_user
 from app.db.models import User
+from app.db.session import get_db
 
 load_dotenv()
 
@@ -34,7 +37,11 @@ class ChatRequest(BaseModel):
 
 
 @router.post("/chat")
-async def chat(request: ChatRequest, current_user: User = Depends(get_current_user)):
+async def chat(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
     if request.test:
         with open(MOCK_PATH) as f:
             return json.load(f)
@@ -54,5 +61,11 @@ async def chat(request: ChatRequest, current_user: User = Depends(get_current_us
             timeout=60.0,
         )
     raw = response.json()
-    formatted = {"message": extract_text_content(raw)}
+    assistant_text = extract_text_content(raw)
+    formatted = {"message": assistant_text}
+
+    last_user = next((m for m in reversed(request.messages) if m.role == "user"), None)
+    if last_user is not None:
+        await save_turn(db, current_user.id, last_user.content, assistant_text)
+
     return build_response(formatted, raw, request.debug)
