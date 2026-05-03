@@ -43,7 +43,7 @@ FastAPI backend with async MySQL (SQLAlchemy + aiomysql) and LLM inference via O
 
 **Request flow:**
 - `app/main.py` — entrypoint; registers routers; handles startup (`Base.metadata.create_all`); contains `/register_user` and `/login_user` directly (not in routes/)
-- `app/routes/` — AI POSTs (`analyze_workout`, `analyze_workout_history`, `generate_gym_profile`, `chat`, `generate_gym_chat_completions`) + read-only GETs (`user_profile`, `gym_profile`, `workout_sessions`, `workout_history_summaries`, `chat_messages`). AI POSTs use `call_llm` → `extract_json_content` → **persist to DB** → `build_response`.
+- `app/routes/` — AI POSTs (`analyze_workout`, `analyze_workout_history`, `generate_gym_profile`, `chat`, `generate_gym_chat_completions`) + read-only GETs and account routes (`users_me` GET+POST, `user_profile` GET+POST, `gym_profile`, `workout_sessions`, `workout_history_summaries`, `chat_messages`). AI POSTs use `call_llm` → `extract_json_content` → **persist to DB** → `build_response`.
 - `app/db/session.py` — async engine + `get_db()` dependency
 - `app/db/models.py` — 8 ORM models: `User`, `UserProfile`, `GymProfile`, `WorkoutSession`, `WorkoutExercise`, `WorkoutAnalysisResult`, `WorkoutHistorySummary`, `ChatMessage`. `ChatMessage` has a `deleted_at` column for soft-delete (24h chat reset). `WorkoutHistorySummary.range_period` is the column name (not `range`) to match `initialize_sql_tables.py`.
 - `app/core/config.py` — constructs `DB_URL` from env vars
@@ -64,6 +64,10 @@ Each request model has `test: bool = False` and `debug: bool = False`.
 - `chat` and `generate_gym_chat_completions` → both call `save_turn()` (user + assistant message rows). Messages older than 24h are soft-deleted on the next chat or `GET /chat_messages`.
 
 **LLM output keys must match DB column names** (no per-route translation): `read_description` (not `read`), `top_exercises` (not `top_3_exercises`). Both prompts and mocks were aligned to this — don't reintroduce the old names.
+
+**Name lives on `users`, not `user_profiles`.** `user_profiles.name` was removed (column dropped, pydantic `UserProfile.name` removed). `GET /user_profile` returns `current_user.name` joined from the user row; `POST /user_profile` no longer accepts or writes `name`. Account name is updated via `POST /users/me`. Don't reintroduce `name` on `user_profiles` or in the `UserProfile` pydantic schema.
+
+**`/analyze_workout_history` request shape: `{range, user_profile, test, debug}`** — sessions are no longer client-supplied. The route queries `WorkoutSession` + `WorkoutExercise` for the current user where `date >= today - RANGE_DAYS[range]` (week=7, month=30, 3months=90), builds the history payload server-side, and feeds it to the LLM. Empty range → returns `EMPTY_SUMMARY` with `summary_id: null` (200, no DB write).
 
 **Exception: `generate_gym_chat_completions`** — uses `extract_text_content` (not JSON parsing) and returns `{"message": str}`. Its `test`/`debug` fields live on `ChatRequest` in `app/schemas/chat.py`.
 

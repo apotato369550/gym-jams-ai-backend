@@ -41,8 +41,10 @@ A friendly walkthrough of the gym-jams API. If you've never used a REST API befo
 | GET    | `/health`                         | no             | Health check                               |
 | POST   | `/register_user`                  | no             | Create an account                          |
 | POST   | `/login_user`                     | no             | Get a JWT token                            |
-| POST   | `/user_profile`                   | **yes**        | Save (create or update) your profile       |
-| GET    | `/user_profile`                   | **yes**        | Fetch your saved profile                   |
+| GET    | `/users/me`                       | **yes**        | Fetch your account row (id, email, name)   |
+| POST   | `/users/me`                       | **yes**        | Update your name                           |
+| POST   | `/user_profile`                   | **yes**        | Save (create or update) your body/goal profile |
+| GET    | `/user_profile`                   | **yes**        | Fetch your saved profile (`name` joins from `/users/me`) |
 | POST   | `/analyze_workout`                | **yes**        | Get AI feedback on a single workout        |
 | POST   | `/generate_gym_profile`           | **yes**        | Generate a personality-style gym archetype |
 | POST   | `/analyze_workout_history`        | **yes**        | AI summary across multiple workouts        |
@@ -161,16 +163,35 @@ If you forget the `Authorization` header, you get `401`:
 
 ## 3. Reference — every protected endpoint
 
+### `GET /users/me` — fetch your account row
+
+```bash
+curl http://YOUR-EC2-HOST/users/me \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+Returns `{user_id, email, name, created_at}`. Your **name lives on the `users` row** (not the profile) — this is the single source of truth.
+
+### `POST /users/me` — update your name
+
+```bash
+curl -X POST http://YOUR-EC2-HOST/users/me \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"name": "Alice (renamed)"}'
+```
+
+Returns `{user_id, name}`. The new name is reflected in `GET /user_profile` immediately.
+
 ### `POST /user_profile` — save your profile
 
-Create or update your profile. Send this once after registration; update it any time your stats change.
+Create or update your body/goal profile. **Does not include `name` anymore** — update that via `POST /users/me`.
 
 ```bash
 curl -X POST http://YOUR-EC2-HOST/user_profile \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
-    "name": "Alice",
     "age_range": "19-24",
     "height_cm": 165,
     "weight_kg": 60,
@@ -268,20 +289,18 @@ Newest first. Messages older than 24h are auto-soft-deleted, so the conversation
 
 ### `/analyze_workout_history`
 
+The endpoint **pulls your sessions from the DB** by range — you don't send them. This means a fresh device sees the same analysis without resyncing first. If you have zero sessions in the range, you get a `200` with an empty summary (consistency_score `0`, etc.).
+
 ```json
 {
   "test": false,
   "debug": false,
-  "history": {
-    "range": "week",
-    "sessions": [
-      {"date": "2026-04-20", "exercises": [...], "notes": null},
-      {"date": "2026-04-22", "exercises": [...], "notes": null}
-    ]
-  },
+  "range": "week",
   "user_profile": { ... }
 }
 ```
+
+`range` is one of `"week"` (last 7 days), `"month"` (30 days), or `"3months"` (90 days), counted from today.
 
 ### `/chat`
 
@@ -319,9 +338,10 @@ Response:
 
 ### The `user_profile` object (used everywhere)
 
+`name` is no longer part of this object — it lives on `/users/me`.
+
 ```json
 {
-  "name": "Alice",
   "age_range": "19-24",
   "height_cm": 165,
   "weight_kg": 60,
