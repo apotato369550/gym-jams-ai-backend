@@ -100,18 +100,20 @@ def test_step_2_login():
         return None, False
 
 
-def test_step_3_analyze_workout():
-    """Step 3: Analyze workout."""
+def test_step_3_analyze_workout(token):
+    """Step 3: Analyze workout (mock mode)."""
     try:
         workout_session = load_fixture(WORKOUT_SESSION_PATH)
         user_profile = load_fixture(USER_PROFILE_PATH)
         payload = {
             "workout": workout_session,
             "user_profile": user_profile,
+            "test": True,
         }
         response = httpx.post(
             f"{API_BASE_URL}/analyze_workout",
             json=payload,
+            headers={"Authorization": f"Bearer {token}"},
             timeout=30.0,
         )
         if response.status_code == 200:
@@ -125,17 +127,19 @@ def test_step_3_analyze_workout():
         return False
 
 
-def test_step_4_chat_completions():
-    """Step 4: Generate gym chat completions."""
+def test_step_4_chat_completions(token):
+    """Step 4: Generate gym chat completions (mock mode)."""
     try:
         user_profile = load_fixture(USER_PROFILE_PATH)
         payload = {
             "messages": [{"role": "user", "content": "What should I eat after leg day?"}],
             "user_profile": user_profile,
+            "test": True,
         }
         response = httpx.post(
             f"{API_BASE_URL}/generate_gym_chat_completions",
             json=payload,
+            headers={"Authorization": f"Bearer {token}"},
             timeout=30.0,
         )
         if response.status_code == 200:
@@ -149,8 +153,51 @@ def test_step_4_chat_completions():
         return False
 
 
+def test_step_5_users_me(token, expected_name):
+    """Step 5: GET /users/me returns the registered name."""
+    try:
+        response = httpx.get(
+            f"{API_BASE_URL}/users/me",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=10.0,
+        )
+        if response.status_code == 200 and response.json().get("name") == expected_name:
+            print(f"[PASS] Step 5: GET /users/me — name matches")
+            return True
+        print(f"[FAIL] Step 5: GET /users/me — {response.status_code}: {response.text}")
+        return False
+    except Exception as e:
+        print(f"[FAIL] Step 5: GET /users/me — {e}")
+        return False
+
+
+def test_step_6_users_me_update(token):
+    """Step 6: POST /users/me updates the name; verify by re-fetching."""
+    try:
+        new_name = "Renamed User"
+        post = httpx.post(
+            f"{API_BASE_URL}/users/me",
+            json={"name": new_name},
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=10.0,
+        )
+        get = httpx.get(
+            f"{API_BASE_URL}/users/me",
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=10.0,
+        )
+        if post.status_code == 200 and get.status_code == 200 and get.json().get("name") == new_name:
+            print(f"[PASS] Step 6: POST /users/me — name updated")
+            return True
+        print(f"[FAIL] Step 6: POST /users/me — post {post.status_code}, get {get.status_code}")
+        return False
+    except Exception as e:
+        print(f"[FAIL] Step 6: POST /users/me — {e}")
+        return False
+
+
 def cleanup_db(user_id):
-    """Step 5: Clean up test data from database."""
+    """Step 7: Clean up test data from database."""
     if user_id is None:
         print(f"[SKIP] Step 5: cleanup — no user_id to clean")
         return True
@@ -204,17 +251,23 @@ def main():
     token, step2_passed = test_step_2_login()
 
     # Step 3: Analyze workout
-    step3_passed = test_step_3_analyze_workout()
+    step3_passed = test_step_3_analyze_workout(token) if token else False
 
     # Step 4: Chat completions
-    step4_passed = test_step_4_chat_completions()
+    step4_passed = test_step_4_chat_completions(token) if token else False
 
-    # Step 5: Cleanup
-    step5_passed = cleanup_db(user_id)
+    # Step 5: GET /users/me
+    step5_passed = test_step_5_users_me(token, TEST_NAME) if token else False
+
+    # Step 6: POST /users/me (update name)
+    step6_passed = test_step_6_users_me_update(token) if token else False
+
+    # Step 7: Cleanup
+    step7_passed = cleanup_db(user_id)
 
     # Summary
-    passed = sum([step1_passed, step2_passed, step3_passed, step4_passed, step5_passed])
-    total = 5
+    passed = sum([step1_passed, step2_passed, step3_passed, step4_passed, step5_passed, step6_passed, step7_passed])
+    total = 7
     print(f"\nResults: {passed}/{total} passed")
 
     return 0 if passed == total else 1
