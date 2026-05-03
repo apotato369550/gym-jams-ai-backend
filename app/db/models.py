@@ -22,7 +22,6 @@ class UserProfile(Base):
     __tablename__ = "user_profiles"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
     age_range: Mapped[str] = mapped_column(String(20), nullable=False)
     height_cm: Mapped[float] = mapped_column(DECIMAL(6, 2), nullable=False)
     weight_kg: Mapped[float] = mapped_column(DECIMAL(6, 2), nullable=False)

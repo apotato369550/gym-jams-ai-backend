@@ -13,24 +13,24 @@ PROJECT_ROOT = SCRIPT_DIR.parent.parent
 
 # Load fixture data
 user_profile_path = PROJECT_ROOT / "data" / "user_profile.json"
-workout_history_path = PROJECT_ROOT / "data" / "sample_workout_history_data" / "workout_history.json"
 
 with open(user_profile_path) as f:
     user_profile = json.load(f)
-
-with open(workout_history_path) as f:
-    workout_history = json.load(f)
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("--test", action="store_true")
 parser.add_argument("--debug", action="store_true")
+parser.add_argument("--range", default="week", choices=["week", "month", "3months"])
 args = parser.parse_args()
 
 # Prepare request payload
+# Sessions are no longer sent from the client — the server queries
+# WorkoutSession + WorkoutExercise rows for the current user within the
+# range window and feeds them to the LLM.
 payload = {
-    "history": workout_history,
-    "user_profile": user_profile
+    "range": args.range,
+    "user_profile": user_profile,
 }
 
 # Conditionally inject test/debug flags

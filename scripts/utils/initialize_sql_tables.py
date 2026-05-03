@@ -82,7 +82,6 @@ def main():
             CREATE TABLE user_profiles (
                 id              INT UNSIGNED    NOT NULL AUTO_INCREMENT,
                 user_id         INT UNSIGNED    NOT NULL,
-                name            VARCHAR(100)    NOT NULL,
                 age_range       VARCHAR(20)     NOT NULL,
                 height_cm       DECIMAL(6,2)    NOT NULL,
                 weight_kg       DECIMAL(6,2)    NOT NULL,

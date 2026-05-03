@@ -72,11 +72,10 @@ def seed_database():
         ]
         cursor.execute(
             """INSERT INTO user_profiles
-               (user_id, name, age_range, height_cm, weight_kg, location, activity_level, goal, intent, constraints)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+               (user_id, age_range, height_cm, weight_kg, location, activity_level, goal, intent, constraints)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             (
                 maria_user_id,
-                "Maria Santos",
                 "19-24",
                 158.00,
                 72.00,
@@ -226,11 +225,10 @@ def seed_database():
         jake_constraints = ["limited time on weekends"]
         cursor.execute(
             """INSERT INTO user_profiles
-               (user_id, name, age_range, height_cm, weight_kg, location, activity_level, goal, intent, constraints)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+               (user_id, age_range, height_cm, weight_kg, location, activity_level, goal, intent, constraints)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             (
                 jake_user_id,
-                "Jake Reyes",
                 "19-24",
                 175.00,
                 68.00,
@@ -380,11 +378,10 @@ def seed_database():
         ana_constraints = ["early morning only", "no heavy lifting", "outdoor preferred"]
         cursor.execute(
             """INSERT INTO user_profiles
-               (user_id, name, age_range, height_cm, weight_kg, location, activity_level, goal, intent, constraints)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+               (user_id, age_range, height_cm, weight_kg, location, activity_level, goal, intent, constraints)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
             (
                 ana_user_id,
-                "Ana Cruz",
                 "25-30",
                 163.00,
                 58.00,

@@ -45,6 +45,7 @@ gym-jams-ai-backend/
 │   │   ├── generate_gym_profile.py
 │   │   ├── generate_gym_chat_completions.py
 │   │   ├── chat.py
+│   │   ├── users_me.py                       # GET + POST /users/me (account name)
 │   │   ├── user_profile.py
 │   │   ├── gym_profile.py                    # GET only
 │   │   ├── workout_sessions.py               # GET list + detail
@@ -202,7 +203,9 @@ Docs: http://127.0.0.1:8000/docs
 - **GET** `/health` — service alive
 - **POST** `/register_user` — register with email/password/name
 - **POST** `/login_user` — returns JWT token
-- **POST** `/user_profile` / **GET** `/user_profile` — save/fetch your profile
+- **GET** `/users/me` — fetch account row (id, email, name)
+- **POST** `/users/me` — update your name (canonical source of truth)
+- **POST** `/user_profile` / **GET** `/user_profile` — save/fetch body/goal profile (`name` joins from `users`)
 - **POST** `/analyze_workout` — AI workout analysis (persists session + exercises + analysis)
 - **POST** `/generate_gym_profile` — AI gym persona profile (upserts your gym profile)
 - **POST** `/analyze_workout_history` — AI history trends (persists summary)
@@ -216,6 +219,10 @@ Docs: http://127.0.0.1:8000/docs
 All AI endpoints require `Authorization: Bearer <token>` (obtained from `/login_user`) and accept `test: bool` (mock mode — no LLM credits AND no DB writes) and `debug: bool` (returns raw + formatted).
 
 **Data lifecycle.** Register → POST `/user_profile` → POST any AI endpoint (results saved automatically) → later, GET to read history. The `test=true` flag bypasses both the LLM and DB writes, so you can experiment freely without polluting your data.
+
+**Name lives on `users`, not `user_profiles`.** Update via `POST /users/me`. `GET /user_profile` joins the user row so the `name` field still appears in profile responses.
+
+**`POST /analyze_workout_history` no longer takes `history.sessions`.** It queries the DB for the current user's sessions in the requested range (`week`/`month`/`3months`, counted from today) and feeds them to the LLM. Empty range → 200 with an empty summary, not an error.
 
 Full request/response examples and Postman steps in **[docs/API_USAGE.md](docs/API_USAGE.md)**.
 
