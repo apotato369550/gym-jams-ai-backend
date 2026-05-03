@@ -2,7 +2,6 @@ from pydantic import BaseModel
 
 
 class UserProfile(BaseModel):
-    name: str
     age_range: str  # one of: "15-18", "19-24", "25-30", "30+"
     height_cm: float
     weight_kg: float
