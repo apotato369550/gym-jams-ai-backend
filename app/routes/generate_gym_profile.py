@@ -19,6 +19,16 @@ class GenerateGymProfileRequest(BaseModel):
     test: bool = False
     debug: bool = False
 
+def _normalize_profile(formatted: dict) -> None:
+    if "modalities_youll_enjoy" not in formatted and "modalities_you'll_enjoy" in formatted:
+        formatted["modalities_youll_enjoy"] = formatted.pop("modalities_you'll_enjoy")
+    suggestion = formatted.get("first_week_suggestion")
+    if isinstance(suggestion, list):
+        formatted["first_week_suggestion"] = "\n".join(
+            f"- {item}" if not str(item).lstrip().startswith("-") else str(item)
+            for item in suggestion
+        )
+
 @router.post("/generate_gym_profile")
 async def generate_gym_profile(
     request: GenerateGymProfileRequest,
@@ -32,6 +42,7 @@ async def generate_gym_profile(
     user_message = json.dumps(request.user_profile.model_dump(), indent=2)
     raw = await call_llm(system_prompt, user_message)
     formatted = extract_json_content(raw)
+    _normalize_profile(formatted)
 
     result = await db.execute(
         select(GymProfile).where(GymProfile.user_id == current_user.id)
