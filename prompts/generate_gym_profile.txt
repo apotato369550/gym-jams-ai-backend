@@ -15,9 +15,9 @@ Analyze this profile and return a JSON object with these exact fields:
 
 2. "read_description": A 2-3 sentence personalized description of what kind of mover this person likely is. What's their vibe? What do you sense about their approach to movement?
 
-3. "modalities_youll_enjoy": An array of 2-3 exercise modalities they'd probably connect with, given their lifestyle, constraints, location, and goal. Consider: bodyweight work, local gym access, outdoor movement, home workouts, group classes, sports, etc. Be specific to Filipino student life (basketball courts, parks, affordable gyms, home setups).
+3. "modalities_youll_enjoy": An array of 2-3 exercise modalities they'd probably connect with, given their lifestyle, constraints, location, and goal. Consider: bodyweight work, local gym access, outdoor movement, home workouts, group classes, sports, etc. Be specific to Filipino student life (basketball courts, parks, affordable gyms, home setups). The JSON key MUST be spelled exactly "modalities_youll_enjoy" with no apostrophe.
 
-4. "first_week_suggestion": A realistic, achievable plan for their first week. Not overwhelming. Acknowledges their constraints. Give them something doable that builds confidence.
+4. "first_week_suggestion": A single string (NOT an array) containing a realistic, achievable plan for their first week. Not overwhelming. Acknowledges their constraints. Give them something doable that builds confidence. If you have multiple steps, write them as one string (use sentences or inline separators).
 
 5. "watch_out_for": One thing to watch out for — a common pitfall for this type of person (e.g., burnout from starting too hard, perfectionism, skipping warm-ups, ignoring rest).
 
