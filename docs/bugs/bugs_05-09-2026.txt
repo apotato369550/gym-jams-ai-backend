@@ -1,0 +1,17 @@
+1.)
+{
+  "archetype": "The Halos Pioneer",
+  "read_description": "You're a driven individual,CVE who's struggled to establish routine and is looking for a consistent approach to movement to help you build momentum. You're strong-willed, yet humbled by a lingering health setback. Your patience and resilience will serve you well in your fitness journey.",
+  "modalities_you'll_enjoy": ["bodyweight work", "breathwork and meditation", "short walks around Cebu"],
+  "first_week_suggestion": "Commit to gentle, low-impact exercise, like short walks around campus or bodyweight mobility work at home. Focusing on pain-free movements and deep breathing exercises will help you regain confidence. Schedule them at the same time each day for a week.",
+  "watch_out_for": "-overcompensating with high-intensity movements, risking further strain on your injured arm. Prioritize recovery and progress gradually to avoid setbacks."
+}
+
+2.)
+{
+  "archetype": "The Intra-Hall Strategist",
+  "read_description": "You're a student navigating a busy campus life, prioritizing simple, streamlined movements to squeeze in whenever possible. You value efficiency and intention in your exercise routine, focusing on making do with what's available.",
+  "modalities_you'll_enjoy": ["bodyweight exercises", "short home workouts", "online fitness tutorials"],
+  "first_week_suggestion": ["start with 5-minute morning stretches at your dorm, incorporating exercises like squats, lunges, and push-ups", "try a 10-minute HIIT video on YouTube while taking a break from studying"],
+  "watch_out_for": "Getting too hard on yourself for not finding a full hour to work out each day. Remember, your end goal is endurance, not perfection."
+}
